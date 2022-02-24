@@ -1,0 +1,71 @@
+<body>
+    <ng-container *ngIf="(deleteState$ | async) as deleteState" [ngSwitch]="deleteState.dataState">
+        <ng-container *ngSwitchCase="Datastate.ERROR">
+            Error when deleting
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="(appState$ | async) as appState" [ngSwitch]="appState.dataState">
+        <ng-container *ngSwitchCase="Datastate.LOADING">
+            loading...
+        </ng-container>
+        <ng-container *ngSwitchCase="Datastate.LOADED">  
+            
+            <div class="card-wrapper" *ngFor="let post of (appState.appData?.data || [])">
+                <mat-card>
+                    <mat-card-subtitle>Posted by {{post.post_author.username}} {{post.post_momentAt}}</mat-card-subtitle>
+                    <mat-card-title>
+                        <h2>
+                            <a [routerLink]="['/post',post.post_id]">
+                                {{post.post_title}}
+                            </a>
+                        </h2>
+                    </mat-card-title>
+                    <mat-card-content>
+                        {{ post.post_body}}
+                    </mat-card-content>
+                    <mat-card-actions>
+                    <button mat-button color="accent" [matBadge]="post.post_likes" matBadgeColor="warn">
+                        <mat-icon class="thumbs">thumb_up</mat-icon>
+                    </button>
+                    <button mat-button color="accent" [matBadge]="post.post_dislikes" matBadgeColor="warn">
+                        <mat-icon class="thumbs">thumb_down</mat-icon>
+                    </button>
+                    </mat-card-actions>
+                    <app-create-comment
+                        [username]="username"
+                        [post_id]="post_id"
+                        [isLoggedIn]="isLoggedIn"
+                        (closeForm)="closeForm()"
+                    ></app-create-comment>
+                    <mat-card-content>
+                        <mat-card *ngFor="let comment of post.comments">
+                            <mat-card-content>
+                                <p >
+                                    {{ comment.comment_body }}
+                                </p>
+                            </mat-card-content>
+                            <mat-card-subtitle>Posted by {{comment.comment_author.username}} {{comment.comment_momentAt}}</mat-card-subtitle>
+                            <mat-card-actions>
+                                <button mat-button color="accent" [matBadge]="comment.comment_likes" matBadgeColor="warn">
+                                    <mat-icon class="thumbs">thumb_up</mat-icon>
+                                </button>
+                                <button mat-button color="accent" [matBadge]="comment.comment_dislikes" matBadgeColor="warn">
+                                    <mat-icon class="thumbs">thumb_down</mat-icon>
+                                </button>  
+                                <div *ngIf="(username$ | async) as username">
+                                    <button mat-button color="warn" *ngIf="comment.comment_author.username === username.username" (click)="onDelete(comment.comment_id)">
+                                        <mat-icon >delete</mat-icon>
+                                    </button>                
+                                </div>  
+                            </mat-card-actions>
+                        </mat-card>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="Datastate.ERROR">
+            {{ appState.error }}
+        </ng-container>
+    </ng-container>
+</body>
+

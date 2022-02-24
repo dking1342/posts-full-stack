@@ -1,0 +1,20 @@
+<nav>
+    <mat-toolbar>
+        <button mat-icon-button color="accent" routerLink="/">
+          <mat-icon>home</mat-icon>
+        </button>
+        <div class="spacer"></div>
+        <button mat-flat-button color="accent" routerLink="login" *ngIf="!isLoggedIn" matTooltip="Login">
+          Login
+        </button>
+        <button mat-flat-button color="accent" routerLink="register" *ngIf="!isLoggedIn" matTooltip="Register">
+          Register
+        </button>
+        <button mat-button color="accent" routerLink="post/new" *ngIf="isLoggedIn" matTooltip="Add Post">
+          <mat-icon>post_add</mat-icon>
+        </button>
+        <button mat-flat-button color="accent" *ngIf="isLoggedIn" (click)="logout()" matTooltip="Logout">
+          Logout
+        </button>
+      </mat-toolbar>
+</nav>

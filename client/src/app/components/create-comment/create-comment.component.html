@@ -1,0 +1,40 @@
+<ng-container *ngIf="(commentState$ | async) as commentState" [ngSwitch]="commentState.dataState">
+    <ng-container *ngSwitchCase="Datastate.ERROR">
+        Error when posting
+    </ng-container>
+</ng-container>
+<ng-container>
+    <button mat-flat-button matTooltip="Minimize comments" style="margin-bottom:15px;" color="warn" (click)="onClickMinimize($event)">
+        <mat-icon>close_fullscreen</mat-icon>
+    </button>
+    <div *ngIf="!isLoggedIn">
+        <p>Log in to comment</p>
+        <a mat-flat-button color="accent" routerLink="/login">Login</a>
+    </div>
+    <div *ngIf="isLoggedIn">
+        <p>Post comment  </p>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div>
+                <mat-form-field>
+                    <mat-label>Comment</mat-label>
+                    <input 
+                        type="text" 
+                        matInput
+                        formControlName="comment_body"
+                        autocomplete="off"
+                        color="accent"
+                        maxlength="140"
+                    >
+                    <mat-error>
+                        Please provide a comment
+                    </mat-error>
+                </mat-form-field>
+                <div>
+                    <button type="submit" mat-flat-button color="accent">
+                        <mat-icon >reply</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>                            
+    </div>
+</ng-container>

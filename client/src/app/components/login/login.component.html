@@ -1,0 +1,26 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="form" color="accent">
+    <h1>Login</h1>
+    <div>
+        <mat-form-field color="accent">
+            <mat-label>Username</mat-label>
+            <input 
+                type="text" 
+                matInput 
+                formControlName="username"
+                placeholder="Enter username"
+                autocomplete="off"
+            >
+            <mat-error color="accent">Please enter username</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <button type="submit" mat-flat-button color="accent">Submit</button>
+        <div class="loginStatus">
+            <ng-container *ngIf="(loadState$ | async) as loadState" [ngSwitch]="loadState">
+                <ng-container style="color:white;" *ngSwitchCase="Datastate.ERROR">
+                    User not found. Please try again
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</form>

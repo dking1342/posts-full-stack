@@ -1,0 +1,30 @@
+.form{
+    width:50%;
+    min-width: 300px;
+    max-width: 500px;
+    margin:0 auto;
+    padding:15px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.95);
+    margin-top: 50px;
+}
+.form h1{
+    width: 100%;
+    text-align: center;
+    color:#fff;
+}
+mat-form-field {
+    width: 100%;
+    display: block;
+    margin:15px 0;
+    color:#fff;
+}
+button{
+    display: block;
+    width: 100%;
+}
+.loginStatus{
+    width: 100%;
+    color: #fff;
+    margin:15px 0;
+}

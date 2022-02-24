@@ -1,0 +1,27 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+    <div>
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input type="text" matInput autocomplete="off" formControlName="post_title">
+            <mat-error>Please provide a title</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Post</mat-label>
+            <input type="text" matInput autocomplete="off" formControlName="post_body">
+            <mat-error>Please provide a post</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <button type="submit" mat-flat-button color="accent">Submit</button>
+    </div>
+    <div class="errorStatus" *ngIf="(postState$ | async) as postState">
+        <mat-error *ngIf="form.invalid && isSubmitted">
+            Please fix errors in the form
+        </mat-error>
+        <mat-error *ngIf="postState.error">
+            Please log out and log back in 
+        </mat-error>
+    </div>
+</form>

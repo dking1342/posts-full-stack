@@ -1,0 +1,25 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="form" color="accent">
+    <h1>Register</h1>
+    <div>
+        <mat-form-field color="accent">
+            <mat-label>Username</mat-label>
+            <input 
+                type="text" 
+                matInput 
+                formControlName="username"
+                placeholder="Enter username"
+                autocomplete="off"
+                (keyup)="hasError = false"
+            >
+            <mat-error color="accent">Please enter username</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <button type="submit" mat-flat-button color="accent">Submit</button>
+        <div class="loginStatus">
+            <ng-container style="color:white;" *ngIf="hasError" >
+                Error in registering the user
+            </ng-container>
+        </div>
+    </div>
+</form>

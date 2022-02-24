@@ -1,0 +1,94 @@
+<ng-container *ngIf="(deleteState$ | async) as deleteState" [ngSwitch]="deleteState.dataState">
+    <ng-container class="post-body" *ngSwitchCase="Datastate.ERROR">
+        Error when deleting
+    </ng-container>
+</ng-container>
+<ng-container *ngIf="(appState$ | async) as appState" [ngSwitch]="appState.dataState">
+    <ng-container *ngSwitchCase="Datastate.LOADING">
+        loading...
+    </ng-container>
+    <ng-container *ngSwitchCase="Datastate.LOADED"> 
+        <div class="posts-container">
+            <app-sorting-button-tray></app-sorting-button-tray> 
+            <div class="card-wrapper" *ngFor="let post of ((postList$ | async) || [])">
+                <mat-card>
+                    <mat-card-subtitle>Posted by {{post.post_author.username}} {{post.post_momentAt}}</mat-card-subtitle>
+                    <mat-card-title>
+                        <h2>
+                            {{post.post_title}}
+                            <!-- <a [routerLink]="['/post',post.post_id]">
+                            </a> -->
+                        </h2>
+                    </mat-card-title>
+                    <mat-card-content>
+                        {{ post.post_body}}
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button color="accent" [matBadge]="post.post_likes" matBadgeColor="warn" (click)="onClickLike(post)" matTooltip="Like">
+                            <mat-icon class="thumbs">thumb_up</mat-icon>
+                        </button>
+                        <button mat-button color="accent" [matBadge]="post.post_dislikes" matBadgeColor="warn" (click)="onClickDislike(post)" matTooltip="Dislike">
+                            <mat-icon class="thumbs">thumb_down</mat-icon>
+                        </button>
+                        <button 
+                            mat-button color="accent" 
+                            [matBadge]="post.comments.length" 
+                            matBadgeColor="warn"
+                            (click)="showComments = true; showPostId = post.post_id; scrollToTop($event)"
+                            matTooltip="Comment"
+                        >
+                            <mat-icon >mode_comment</mat-icon>
+                        </button>
+                        <div *ngIf="(username$ | async) as username">
+                            <button mat-button color="warn" *ngIf="post.post_author.username === username.username" (click)="onDelete(post.post_id)" matTooltip="Delete">
+                                <mat-icon >delete</mat-icon>
+                            </button>
+                        </div>
+                    </mat-card-actions>
+                    <mat-card-content *ngIf="showComments && showPostId === post.post_id">
+                        <app-create-comment
+                            [username]="username"
+                            [post_id]="post.post_id"
+                            [isLoggedIn]="isLoggedIn"
+                            (closeForm)="commentEvent($event)"
+                            (minimizeComments)="commentMinimize($event)"
+                        ></app-create-comment>
+                        <mat-card *ngFor="let comment of post.comments">
+                            <mat-card-content>
+                                <p >
+                                    {{ comment.comment_body }}
+                                </p>
+                            </mat-card-content>
+                            <mat-card-subtitle>Posted by {{comment.comment_author.username}} {{comment.comment_momentAt}}</mat-card-subtitle>
+                            <mat-card-actions>
+                                <button mat-button color="accent" [matBadge]="comment.comment_likes" matBadgeColor="warn" (click)="onClickCommentLike(post.post_id,comment)">
+                                    <mat-icon class="thumbs">thumb_up</mat-icon>
+                                </button>
+                                <button mat-button color="accent" [matBadge]="comment.comment_dislikes" matBadgeColor="warn" (click)="onClickCommentDislike(post.post_id,comment)">
+                                    <mat-icon class="thumbs">thumb_down</mat-icon>
+                                </button>  
+                                <div *ngIf="(username$ | async) as username">
+                                    <button mat-button color="warn" *ngIf="comment.comment_author.username === username.username" (click)="onDeleteComment(post.post_id,comment.comment_id)">
+                                        <mat-icon >delete</mat-icon>
+                                    </button>                
+                                </div>  
+                            </mat-card-actions>
+                        </mat-card>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="Datastate.ERROR">
+        <div class="posts-container">
+            <div class="card-wrapper">
+                <mat-card>
+                    <h1>{{ appState.error }}</h1>
+    
+                </mat-card>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+
+
